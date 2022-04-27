@@ -100,7 +100,7 @@ namespace PBSA.Services
             {
                 SaleResponse saleResponse = new SaleResponse();
                 saleResponse.Sale = _mapper.Map<Sales>(sale);
-                saleResponse.Customer = _mapper.Map<Response.Customer>(_customerService.getCustomerId(saleResponse.Sale.CustomerId));
+                saleResponse.Customer = _mapper.Map<Response.Customer>(_customerService.GetCustomerId(saleResponse.Sale.CustomerId));
                 List<Response.Address> addresses = new List<Response.Address>();
                 var address = _addressService.GetAddressById(Convert.ToInt32(saleResponse.Sale.CustomerId));
                 foreach (var item in address)

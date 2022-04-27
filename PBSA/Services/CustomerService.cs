@@ -9,7 +9,7 @@ namespace PBSA.Services
 {
     public class CustomerService : ICustomerService
     {
-        public Customer getCustomerId(int customerId)
+        public Customer GetCustomerId(int customerId)
         {
             using (var db = new PBSAContext())
             {

@@ -8,6 +8,6 @@ namespace PBSA.Interface
 {
     public interface ICustomerService
     {
-        Customer getCustomerId(int customerId);
+        Customer GetCustomerId(int customerId);
     }
 }

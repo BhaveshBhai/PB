@@ -7,6 +7,6 @@ namespace PBSA.Response
 {
     public class CreateSaleResponse
     {
-        public int saleId { get; set; }
+        public int SaleId { get; set; }
     }
 }

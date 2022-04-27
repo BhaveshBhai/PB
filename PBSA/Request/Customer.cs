@@ -13,5 +13,11 @@ namespace PBSA.Request
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
+        [Required]
+        [DataType(DataType.PhoneNumber)]
+        public string Phone { get; set; }
     }
 }
