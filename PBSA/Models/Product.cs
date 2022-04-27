@@ -17,9 +17,9 @@ namespace PBSA.Models
         public int ProductId { get; set; }
         public string Title { get; set; }
         public string Code { get; set; }
-        public decimal? Weight { get; set; }
-        public decimal? PriceAmount { get; set; }
-        public decimal? PriceTax { get; set; }
+        public decimal Weight { get; set; }
+        public decimal PriceAmount { get; set; }
+        public decimal PriceTax { get; set; }
 
         public virtual ICollection<SaleLine> SaleLine { get; set; }
     }

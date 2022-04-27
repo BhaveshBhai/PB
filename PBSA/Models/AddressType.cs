@@ -12,15 +12,11 @@ namespace PBSA.Models
         public AddressType()
         {
             Address = new HashSet<Address>();
-            Sale = new HashSet<Sale>();
         }
 
         public int AddressTypeId { get; set; }
         public string AddresType { get; set; }
-        public int? CustomerId { get; set; }
 
-        public virtual Customer Customer { get; set; }
         public virtual ICollection<Address> Address { get; set; }
-        public virtual ICollection<Sale> Sale { get; set; }
     }
 }

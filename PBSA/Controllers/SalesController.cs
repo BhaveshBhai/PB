@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PBSA.Models;
+using PBSA.Interface;
+using PBSA.Request;
+using PBSA.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 
 namespace PBSA.Controllers
 {
@@ -12,15 +15,37 @@ namespace PBSA.Controllers
     [ApiController]
     public class SalesController : ControllerBase
     {
-        [HttpGet]
-        public async Task<List<Sale>> GetSales(int id)
+        public readonly ISalesService _salesService;
+        public SalesController(ISalesService salesService)
         {
-            return null;
+            _salesService = salesService;
         }
-        [HttpPost]
-        public async Task<int> createSales(Sale sale)
+        [HttpGet]
+        [ResponseType(typeof(SaleResponse))]
+        public async Task<IActionResult> GetAsync(int id)
         {
-            return 0;
+            var sale = await _salesService.GetSaleById(id);
+            if (sale == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var result = await _salesService.GetSaleRespone(sale);
+                return Ok(result);
+            }
+        }
+        // POST api/<SalesController>
+        [HttpPost]
+        [ResponseType(typeof(CreateSaleResponse))]
+        public async Task<IActionResult> Post([FromBody] SalesRequest salesRequest)
+        {
+            var result = await _salesService.CreateSale(salesRequest);
+            if (result > 0)
+            {
+                return Ok(result);
+            }
+            return NotFound();
         }
     }
 }

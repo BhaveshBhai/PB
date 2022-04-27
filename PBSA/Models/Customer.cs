@@ -9,11 +9,17 @@ namespace PBSA.Models
 {
     public partial class Customer
     {
+        public Customer()
+        {
+            Address = new HashSet<Address>();
+            Sale = new HashSet<Sale>();
+        }
+
         public int CustomerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int? UserId { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual ICollection<Address> Address { get; set; }
+        public virtual ICollection<Sale> Sale { get; set; }
     }
 }

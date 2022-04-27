@@ -10,12 +10,14 @@ namespace PBSA.Models
     public partial class Address
     {
         public int AddressId { get; set; }
-        public int? AddressTypeId { get; set; }
+        public int AddressTypeId { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Street { get; set; }
         public string PostCode { get; set; }
+        public int CustomerId { get; set; }
 
         public virtual AddressType AddressType { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

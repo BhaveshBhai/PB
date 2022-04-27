@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\PBSA\\API\\PBSA\\PBSA.csproj": {}
+    "C:\\PBSA\\PB\\PBSA\\PBSA.csproj": {}
   },
   "projects": {
-    "C:\\PBSA\\API\\PBSA\\PBSA.csproj": {
+    "C:\\PBSA\\PB\\PBSA\\PBSA.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\PBSA\\API\\PBSA\\PBSA.csproj",
+        "projectUniqueName": "C:\\PBSA\\PB\\PBSA\\PBSA.csproj",
         "projectName": "PBSA",
-        "projectPath": "C:\\PBSA\\API\\PBSA\\PBSA.csproj",
+        "projectPath": "C:\\PBSA\\PB\\PBSA\\PBSA.csproj",
         "packagesPath": "C:\\Users\\PREETI\\.nuget\\packages\\",
-        "outputPath": "C:\\PBSA\\API\\PBSA\\obj\\",
+        "outputPath": "C:\\PBSA\\PB\\PBSA\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PREETI\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,14 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "Microsoft.AspNet.WebApi.Core": {
+              "target": "Package",
+              "version": "[5.2.8, )"
+            },
             "Microsoft.AspNetCore.Authentication.Core": {
               "target": "Package",
               "version": "[2.2.0, )"
@@ -47,6 +55,10 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[3.1.24, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.2.5, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -83,6 +95,10 @@
             "Swashbuckle.AspNetCore.Swagger": {
               "target": "Package",
               "version": "[6.3.0, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerUI": {
+              "target": "Package",
+              "version": "[6.3.1, )"
             }
           },
           "imports": [

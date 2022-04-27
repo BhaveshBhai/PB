@@ -10,10 +10,10 @@ namespace PBSA.Models
     public partial class SaleLine
     {
         public int SaleLineId { get; set; }
+        public int Quantity { get; set; }
+        public decimal SubTotalAmount { get; set; }
+        public decimal SubTotalTax { get; set; }
         public int ProductId { get; set; }
-        public decimal? Quantity { get; set; }
-        public decimal? SubTotalAmount { get; set; }
-        public decimal? SubTotalTax { get; set; }
 
         public virtual Product Product { get; set; }
     }
