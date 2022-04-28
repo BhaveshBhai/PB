@@ -5,14 +5,12 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace PBSA.Models
+namespace PBSA.Models.DB
 {
     public partial class Address
     {
         public int AddressId { get; set; }
         public int AddressTypeId { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
         public string Street { get; set; }
         public string PostCode { get; set; }
         public int CustomerId { get; set; }

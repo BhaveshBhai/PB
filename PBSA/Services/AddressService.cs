@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PBSA.Interface;
 using PBSA.Models;
+using PBSA.Models.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -21,7 +21,7 @@ namespace PBSA.Controllers
             _salesService = salesService;
         }
         [HttpGet]
-        [ResponseType(typeof(SaleResponse))]
+        [ResponseType(typeof(SalesResponse))]
         public async Task<IActionResult> GetAsync(int id)
         {
             var sale = await _salesService.GetSaleById(id);

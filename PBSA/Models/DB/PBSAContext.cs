@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace PBSA.Models
+namespace PBSA.Models.DB
 {
     public partial class PBSAContext : DbContext
     {
@@ -25,6 +25,7 @@ namespace PBSA.Models
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Sale> Sale { get; set; }
         public virtual DbSet<SaleLine> SaleLine { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -39,14 +40,6 @@ namespace PBSA.Models
         {
             modelBuilder.Entity<Address>(entity =>
             {
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Phone)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.PostCode)
                     .IsRequired()
                     .HasMaxLength(4);
@@ -77,6 +70,10 @@ namespace PBSA.Models
 
             modelBuilder.Entity<Customer>(entity =>
             {
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -84,6 +81,15 @@ namespace PBSA.Models
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Phone)
+                    .IsRequired()
+                    .HasMaxLength(12);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Customer)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Customer_User");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -131,6 +137,17 @@ namespace PBSA.Models
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SaleLine_Product");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);
