@@ -37,10 +37,14 @@ namespace PBSA.Services
                 {
                     try
                     {
-                        var customer = _mapper.Map<Customer>(salesRequest.Customer);
-                        customer.UserId = 1;
-                        context.Customer.Add(customer);
-                        context.SaveChanges();
+                        var customer = _customerService.GetCustomerByEmail(salesRequest.Customer.Email);
+                        if (customer == null)
+                        {
+                            customer = _mapper.Map<Customer>(salesRequest.Customer);
+                            customer.UserId = 1;
+                            context.Customer.Add(customer);
+                            context.SaveChanges();
+                        }
 
                         foreach (var item in salesRequest.Address)
                         {

@@ -5,6 +5,6 @@ namespace PBSA.Interface
     public interface ICustomerService
     {
         Customer GetCustomerId(int customerId);
-        bool GetCustomerByEmail(string email);
+        Customer GetCustomerByEmail(string email);
     }
 }

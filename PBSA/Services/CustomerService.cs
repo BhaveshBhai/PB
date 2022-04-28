@@ -6,11 +6,11 @@ namespace PBSA.Services
 {
     public class CustomerService : ICustomerService
     {
-        public bool GetCustomerByEmail(string email)
+        public Customer GetCustomerByEmail(string email)
         {
             using (var db = new PBSAContext())
             {
-                return db.Customer.Where(x => x.Email == email).Count() > 0 ? true : false;
+                return db.Customer.Where(x => x.Email == email).FirstOrDefault();
             }
         }
 
