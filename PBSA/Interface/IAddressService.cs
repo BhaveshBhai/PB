@@ -7,5 +7,6 @@ namespace PBSA.Interface
     {
         int GetAddressTypeId(string type);
         List<Address> GetAddressById(int addressId);
+        Address GetAddressByCustomer(int customerId, int addressTypeId);
     }
 }

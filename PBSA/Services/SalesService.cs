@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PBSA.Interface;
 using PBSA.Models;
 using PBSA.Models.DB;
@@ -17,16 +18,22 @@ namespace PBSA.Services
         private readonly IAddressService _addressService;
         private readonly ICustomerService _customerService;
         private readonly IProductService _productService;
+        private readonly ILogger _logger;
         public SalesService(
-            IMapper mapper, IAddressService addressService, ICustomerService customerService, IProductService productService)
+            IMapper mapper, IAddressService addressService,
+            ICustomerService customerService,
+            IProductService productService,
+            ILogger logger)
         {
             _mapper = mapper;
             _addressService = addressService;
             _customerService = customerService;
             _productService = productService;
+            _logger = logger;
         }
         public Task<int> CreateSale(SalesRequest salesRequest)
         {
+            _logger.LogInformation($"Create sale service call with request:{salesRequest}");
             decimal totalAmount = 0.0m;
             decimal totalTax = 0.0m;
             List<string> salelineIds = new List<string>();
@@ -51,16 +58,28 @@ namespace PBSA.Services
                             var address = _mapper.Map<Address>(item);
                             address.AddressTypeId = _addressService.GetAddressTypeId(item.Type);
                             address.CustomerId = customer.CustomerId;
-                            context.Address.Add(address);
+                            var updateAddress = _addressService.GetAddressByCustomer(address.CustomerId, address.AddressTypeId);
+                            if (updateAddress != null)
+                            {
+                                address.AddressId = updateAddress.AddressId;
+                                context.Address.Update(address);
+                            }
+                            else
+                            {
+                                context.Address.Add(address);
+                            }
                             context.SaveChanges();
                         }
 
                         foreach (var productRequest in salesRequest.Product)
                         {
-                            var product = _mapper.Map<Product>(productRequest);
-                            context.Product.Add(product);
-                            context.SaveChanges();
-
+                            var product = _productService.GetProductByCode(productRequest.Code);
+                            if (product == null)
+                            {
+                                product = _mapper.Map<Product>(productRequest);
+                                context.Product.Add(product);
+                                context.SaveChanges();
+                            }
                             SaleLine saleLine = new SaleLine();
                             saleLine.ProductId = product.ProductId;
                             saleLine.Quantity = productRequest.Quantity;
@@ -86,6 +105,7 @@ namespace PBSA.Services
                     catch (Exception ex)
                     {
                         transaction.Rollback();
+                        _logger.LogError($"Error in create sales with message: {ex.Message}");
                         return Task.FromResult(sale.SaleId);
                     }
                 }
