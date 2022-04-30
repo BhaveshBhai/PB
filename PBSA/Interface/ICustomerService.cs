@@ -1,13 +1,10 @@
-﻿using PBSA.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using PBSA.Models.DB;
 
 namespace PBSA.Interface
 {
     public interface ICustomerService
     {
         Customer GetCustomerId(int customerId);
+        Customer GetCustomerByEmail(string email);
     }
 }

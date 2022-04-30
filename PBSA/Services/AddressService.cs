@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PBSA.Interface;
 using PBSA.Models;
+using PBSA.Models.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,21 @@ namespace PBSA.Services
             {
                 return context.Address.Where(x => x.AddressId == addressId).Include("AddressType").ToList();
             }
+        }
+        public Address GetAddressByCustomer(int customerId, int addressTypeId)
+        {
+            try
+            {
+                using var db = new PBSAContext();
+                var addresses = db.Address.Where(x => x.AddressTypeId == addressTypeId && x.CustomerId == customerId).FirstOrDefault();
+                return addresses;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

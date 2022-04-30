@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PBSA.Interface;
-using PBSA.Models;
 using PBSA.Services;
 using System;
 
@@ -35,6 +34,9 @@ namespace PBSA
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IAddressService, AddressService>();
             services.AddTransient<ICustomerService, CustomerService>();
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<SalesService>>();
+            services.AddSingleton(typeof(ILogger), logger);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ASPDOTNETCORE.API", Version = "v1" });
@@ -42,7 +44,7 @@ namespace PBSA
         }   
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {

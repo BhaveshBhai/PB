@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PBSA.Request
+namespace PBSA.Models
 {
-    public class CustomerRequest
+    public class CustomerModel
     {
         [Required]
         public string FirstName { get; set; }

@@ -2,6 +2,7 @@
 using PBSA.Models;
 using PBSA.Request;
 using PBSA;
+using PBSA.Models.DB;
 
 namespace PBSA.Mapping
 {
@@ -9,14 +10,14 @@ namespace PBSA.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<CustomerRequest, Customer>();
-            CreateMap<Customer,Response.Customer>();
-            CreateMap<AddressRequest, Address>();
-            CreateMap<Address, Response.Address>();
+            CreateMap<CustomerModel, Customer>();
+            CreateMap<Customer, CustomerModel>();
+            CreateMap<AddressModel, Address>();
+            CreateMap<Address, AddressModel>();
             CreateMap<ProductRequest, Product>();
-            CreateMap<Product, Response.Product>();
-            CreateMap<Response.Sales, Sale>();
-            CreateMap<Sale, Response.Sales>();
+            CreateMap<Product, Response.ProductResponse>();
+            CreateMap<Response.SaleResponse, Sale>();
+            CreateMap<Sale, Response.SaleResponse>();
         }
     }
 }

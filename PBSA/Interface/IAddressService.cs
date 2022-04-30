@@ -1,8 +1,5 @@
-﻿using PBSA.Models;
-using System;
+﻿using PBSA.Models.DB;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PBSA.Interface
 {
@@ -10,5 +7,6 @@ namespace PBSA.Interface
     {
         int GetAddressTypeId(string type);
         List<Address> GetAddressById(int addressId);
+        Address GetAddressByCustomer(int customerId, int addressTypeId);
     }
 }

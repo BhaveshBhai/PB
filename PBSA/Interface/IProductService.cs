@@ -1,13 +1,11 @@
-﻿using PBSA.Request;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using PBSA.Models.DB;
+using PBSA.Request;
 
 namespace PBSA.Interface
 {
-   public interface IProductService
+    public interface IProductService
     {
         int CreateProduct(ProductRequest product);
+        Product GetProductByCode(string code);
     }
 }

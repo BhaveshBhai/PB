@@ -21,7 +21,7 @@ namespace PBSA.Controllers
             _salesService = salesService;
         }
         [HttpGet]
-        [ResponseType(typeof(SaleResponse))]
+        [ResponseType(typeof(SalesResponse))]
         public async Task<IActionResult> GetAsync(int id)
         {
             var sale = await _salesService.GetSaleById(id);
@@ -35,17 +35,23 @@ namespace PBSA.Controllers
                 return Ok(result);
             }
         }
-        // POST api/<SalesController>
         [HttpPost]
         [ResponseType(typeof(CreateSaleResponse))]
         public async Task<IActionResult> Post([FromBody] SalesRequest salesRequest)
         {
-            var result = await _salesService.CreateSale(salesRequest);
-            if (result > 0)
-            {
-                return Ok(result);
+            if (ModelState.IsValid)
+            {   
+                var result = await _salesService.CreateSale(salesRequest);
+                if (result > 0)
+                {
+                    return Ok(result);
+                }
+                return NotFound();
             }
-            return NotFound();
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
