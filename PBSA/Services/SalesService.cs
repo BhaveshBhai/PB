@@ -33,7 +33,7 @@ namespace PBSA.Services
         }
         public Task<int> CreateSale(SalesRequest salesRequest)
         {
-            _logger.LogInformation($"Create sale service call with request:{salesRequest}");
+            _logger.LogInformation($"Create sale service with request:{salesRequest}");
             decimal totalAmount = 0.0m;
             decimal totalTax = 0.0m;
             List<string> salelineIds = new List<string>();
@@ -44,6 +44,8 @@ namespace PBSA.Services
                 {
                     try
                     {
+                        //Check customer already there or not
+                        // Email address is uniq.
                         var customer = _customerService.GetCustomerByEmail(salesRequest.Customer.Email);
                         if (customer == null)
                         {
@@ -58,6 +60,8 @@ namespace PBSA.Services
                             var address = _mapper.Map<Address>(item);
                             address.AddressTypeId = _addressService.GetAddressTypeId(item.Type);
                             address.CustomerId = customer.CustomerId;
+
+                            //Upodate address based on customerId and AddressTypeId
                             var updateAddress = _addressService.GetAddressByCustomer(address.CustomerId, address.AddressTypeId);
                             if (updateAddress != null)
                             {
@@ -73,6 +77,8 @@ namespace PBSA.Services
 
                         foreach (var productRequest in salesRequest.Product)
                         {
+                            //If product is already there then not allow to insert dublicate product
+                            //Here Product code is uniq.
                             var product = _productService.GetProductByCode(productRequest.Code);
                             if (product == null)
                             {
@@ -80,14 +86,18 @@ namespace PBSA.Services
                                 context.Product.Add(product);
                                 context.SaveChanges();
                             }
+
                             SaleLine saleLine = new SaleLine();
                             saleLine.ProductId = product.ProductId;
                             saleLine.Quantity = productRequest.Quantity;
                             saleLine.SubTotalAmount = productRequest.PriceAmount * productRequest.Quantity;
                             saleLine.SubTotalTax = productRequest.PriceTax * productRequest.Quantity;
+
                             context.SaleLine.Add(saleLine);
                             context.SaveChanges();
+
                             salelineIds.Add(saleLine.SaleLineId.ToString());
+
                             totalAmount += saleLine.SubTotalAmount;
                             totalTax += saleLine.SubTotalTax;
                         }
@@ -96,6 +106,7 @@ namespace PBSA.Services
                         sale.SaleLineIds = string.Join(",", salelineIds);
                         sale.TotalAmount = totalAmount;
                         sale.TotalTax = totalTax;
+
                         context.Sale.Add(sale);
                         context.SaveChanges();
 
@@ -113,54 +124,54 @@ namespace PBSA.Services
         }
         public Task<Sale> GetSaleById(int id)
         {
-            using (var db = new PBSAContext())
-            {
-                return Task.FromResult(db.Sale.Where(x => x.SaleId == id).Include("Customer").FirstOrDefault());
-            }
+            using var db = new PBSAContext();
+            return Task.FromResult(db.Sale.Where(x => x.SaleId == id).Include("Customer").FirstOrDefault());
         }
-        public Task<Response.SalesResponse> GetSaleRespone(Sale sale)
+        public async Task<Response.SalesResponse> GetSaleRespone(Sale sale)
         {
+            _logger.LogInformation($"GetSale method call with Sale :{sale}");
+            Response.SalesResponse saleResponse = new Response.SalesResponse();
             try
             {
-                Response.SalesResponse saleResponse = new Response.SalesResponse();
                 saleResponse.Sale = _mapper.Map<Response.SaleResponse>(sale);
-                saleResponse.Customer = _mapper.Map<CustomerModel>(_customerService.GetCustomerId(saleResponse.Sale.CustomerId));
-                List<AddressModel> addresses = new List<AddressModel>();
-                var address = _addressService.GetAddressById(Convert.ToInt32(saleResponse.Sale.CustomerId));
-                foreach (var item in address)
-                {
-                    AddressModel ad = new AddressModel();
-                    ad = _mapper.Map<AddressModel>(item);
-                    ad.Type = item.AddressType.AddresType;
-                    addresses.Add(ad);
-                }
+                var customer = _customerService.GetCustomerId(saleResponse.Sale.CustomerId);
+                saleResponse.Customer = customer != null ? _mapper.Map<CustomerModel>(customer) : null;
+                //Linq query 
+                var addresses = (from address1 in _addressService.GetAddressById(Convert.ToInt32(saleResponse.Sale.CustomerId))
+                                 select new AddressModel
+                                 {
+                                     PostCode = address1.PostCode,
+                                     Street = address1.Street,
+                                     Type = address1.AddressType.AddresType
+                                 }).ToList();
+
                 List<Response.ProductResponse> products = new List<Response.ProductResponse>();
+                // I already use lebmda query so here I use foreach loop
                 foreach (var item in saleResponse.Sale.SaleLineIds.Split(","))
                 {
-                    var saleLine = GetSaleLineById(Convert.ToInt32(item)).Result;
-                    var p = _mapper.Map<Response.ProductResponse>(saleLine.Product);
-                    p.SubTotal = saleLine.SubTotalAmount;
-                    p.SubTotalTax = saleLine.SubTotalTax;
-                    p.Quantity = saleLine.Quantity;
-                    products.Add(p);
+                    var saleLine = await GetSaleLineById(Convert.ToInt32(item));
+                    var productResponse = _mapper.Map<Response.ProductResponse>(saleLine.Product);
+                    productResponse.SubTotal = saleLine.SubTotalAmount;
+                    productResponse.SubTotalTax = saleLine.SubTotalTax;
+                    productResponse.Quantity = saleLine.Quantity;
+                    products.Add(productResponse);
                 };
                 saleResponse.Address = addresses;
                 saleResponse.Products = products;
-                return Task.FromResult(saleResponse);
+
+                return await Task.FromResult(saleResponse);
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogError($"Error in get sales record with message: {ex.Message}");
+                return await Task.FromResult(saleResponse);
             }
 
         }
         public Task<SaleLine> GetSaleLineById(int saleLineId)
         {
-            using (var db = new PBSAContext())
-            {
-                return Task.FromResult(db.SaleLine.Where(x => x.SaleLineId == saleLineId).Include("Product").FirstOrDefault());
-            }
+            using var db = new PBSAContext();
+            return Task.FromResult(db.SaleLine.Where(x => x.SaleLineId == saleLineId).Include("Product").FirstOrDefault());
         }
     }
 }

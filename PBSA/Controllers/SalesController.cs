@@ -27,12 +27,18 @@ namespace PBSA.Controllers
             var sale = await _salesService.GetSaleById(id);
             if (sale == null)
             {
-                return NotFound();
+                var result = new NotFoundObjectResult(new { message = "404 Not Found", currentDate = DateTime.Now });
+                return result;
             }
             else
             {
-                var result = await _salesService.GetSaleRespone(sale);
-                return Ok(result);
+                var salesResponse = await _salesService.GetSaleRespone(sale);
+                if (salesResponse == null)
+                {
+                    var result = new NotFoundObjectResult(new { message = "404 Not Found", currentDate = DateTime.Now });
+                    return result;
+                }
+                return Ok(salesResponse);
             }
         }
         [HttpPost]
@@ -40,7 +46,7 @@ namespace PBSA.Controllers
         public async Task<IActionResult> Post([FromBody] SalesRequest salesRequest)
         {
             if (ModelState.IsValid)
-            {   
+            {
                 var result = await _salesService.CreateSale(salesRequest);
                 if (result > 0)
                 {

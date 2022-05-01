@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\PBSA\\PB\\PBSA\\PBSA.csproj": {}
+    "C:\\Dev\\PB\\PBSA\\PBSA.csproj": {}
   },
   "projects": {
-    "C:\\PBSA\\PB\\PBSA\\PBSA.csproj": {
+    "C:\\Dev\\PB\\PBSA\\PBSA.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\PBSA\\PB\\PBSA\\PBSA.csproj",
+        "projectUniqueName": "C:\\Dev\\PB\\PBSA\\PBSA.csproj",
         "projectName": "PBSA",
-        "projectPath": "C:\\PBSA\\PB\\PBSA\\PBSA.csproj",
-        "packagesPath": "C:\\Users\\PREETI\\.nuget\\packages\\",
-        "outputPath": "C:\\PBSA\\PB\\PBSA\\obj\\",
+        "projectPath": "C:\\Dev\\PB\\PBSA\\PBSA.csproj",
+        "packagesPath": "C:\\Users\\bhavesh.2108720\\.nuget\\packages\\",
+        "outputPath": "C:\\Dev\\PB\\PBSA\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\PREETI\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\bhavesh.2108720\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

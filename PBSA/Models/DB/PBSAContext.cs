@@ -32,7 +32,7 @@ namespace PBSA.Models.DB
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=BHAVESH\\SQLEXPRESS;Database=PBSA;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Data Source=SQL8001.site4now.net;Initial Catalog=db_a86494_pbsdb;User Id=db_a86494_pbsdb_admin;Password=Bhavesh@143;");
             }
         }
 
