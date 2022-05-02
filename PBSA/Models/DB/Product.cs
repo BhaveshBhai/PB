@@ -20,6 +20,8 @@ namespace PBSA.Models.DB
         public decimal Weight { get; set; }
         public decimal PriceAmount { get; set; }
         public decimal PriceTax { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifyDate { get; set; }
 
         public virtual ICollection<SaleLine> SaleLine { get; set; }
     }

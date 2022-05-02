@@ -14,6 +14,7 @@ namespace PBSA.Models.DB
         public decimal TotalAmount { get; set; }
         public decimal TotalTax { get; set; }
         public string SaleLineIds { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public virtual Customer Customer { get; set; }
     }
