@@ -14,6 +14,7 @@ namespace PBSA.Models.DB
         public string Street { get; set; }
         public string PostCode { get; set; }
         public int CustomerId { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public virtual AddressType AddressType { get; set; }
         public virtual Customer Customer { get; set; }

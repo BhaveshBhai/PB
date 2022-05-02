@@ -21,6 +21,7 @@ namespace PBSA.Models.DB
         public string Email { get; set; }
         public string Phone { get; set; }
         public int? UserId { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public virtual User User { get; set; }
         public virtual ICollection<Address> Address { get; set; }

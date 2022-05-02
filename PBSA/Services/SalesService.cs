@@ -20,7 +20,8 @@ namespace PBSA.Services
         private readonly IProductService _productService;
         private readonly ILogger _logger;
         public SalesService(
-            IMapper mapper, IAddressService addressService,
+            IMapper mapper,
+            IAddressService addressService,
             ICustomerService customerService,
             IProductService productService,
             ILogger logger)
@@ -50,27 +51,33 @@ namespace PBSA.Services
                         if (customer == null)
                         {
                             customer = _mapper.Map<Customer>(salesRequest.Customer);
-                            customer.UserId = 1;
+                            customer.UserId = 1; // I can fetch Id from token or session or anyother way 
+                            customer.CreatedDate = DateTime.UtcNow;
                             context.Customer.Add(customer);
                             context.SaveChanges();
                         }
-
+                        _logger.LogInformation($"GetSale method call- customer inserted :{customer}");
+                       
                         foreach (var item in salesRequest.Address)
                         {
+                            
+
                             var address = _mapper.Map<Address>(item);
                             address.AddressTypeId = _addressService.GetAddressTypeId(item.Type);
                             address.CustomerId = customer.CustomerId;
-
+                            address.CreatedDate = DateTime.UtcNow;
                             //Upodate address based on customerId and AddressTypeId
                             var updateAddress = _addressService.GetAddressByCustomer(address.CustomerId, address.AddressTypeId);
                             if (updateAddress != null)
                             {
                                 address.AddressId = updateAddress.AddressId;
                                 context.Address.Update(address);
+                                _logger.LogInformation($"GetSale method call- address updated:{address}");
                             }
                             else
                             {
                                 context.Address.Add(address);
+                                _logger.LogInformation($"GetSale method call- address created :{address}");
                             }
                             context.SaveChanges();
                         }
@@ -83,8 +90,10 @@ namespace PBSA.Services
                             if (product == null)
                             {
                                 product = _mapper.Map<Product>(productRequest);
+                                product.CreatedDate = DateTime.UtcNow;
                                 context.Product.Add(product);
                                 context.SaveChanges();
+                                _logger.LogInformation($"GetSale method call- product created :{product}");
                             }
 
                             SaleLine saleLine = new SaleLine();
@@ -95,7 +104,7 @@ namespace PBSA.Services
 
                             context.SaleLine.Add(saleLine);
                             context.SaveChanges();
-
+                            _logger.LogInformation($"GetSale method call- saleLine crearted :{saleLine}");
                             salelineIds.Add(saleLine.SaleLineId.ToString());
 
                             totalAmount += saleLine.SubTotalAmount;
@@ -106,10 +115,10 @@ namespace PBSA.Services
                         sale.SaleLineIds = string.Join(",", salelineIds);
                         sale.TotalAmount = totalAmount;
                         sale.TotalTax = totalTax;
-
+                        sale.CreatedDate = DateTime.UtcNow;
                         context.Sale.Add(sale);
                         context.SaveChanges();
-
+                        _logger.LogInformation($"GetSale method call- Sale created :{sale}");
                         transaction.Commit();
                         return Task.FromResult(sale.SaleId);
                     }
@@ -122,10 +131,11 @@ namespace PBSA.Services
                 }
             }
         }
-        public Task<Sale> GetSaleById(int id)
+        public Task<Sale> GetSaleById(int saleId)
         {
+            _logger.LogInformation($"GetSaleById method call:{saleId}");
             using var db = new PBSAContext();
-            return Task.FromResult(db.Sale.Where(x => x.SaleId == id).Include("Customer").FirstOrDefault());
+            return Task.FromResult(db.Sale.Where(x => x.SaleId == saleId).Include("Customer").FirstOrDefault());
         }
         public async Task<Response.SalesResponse> GetSaleRespone(Sale sale)
         {
@@ -170,6 +180,7 @@ namespace PBSA.Services
         }
         public Task<SaleLine> GetSaleLineById(int saleLineId)
         {
+            _logger.LogInformation($"GetSaleLineById method call :{saleLineId}");
             using var db = new PBSAContext();
             return Task.FromResult(db.SaleLine.Where(x => x.SaleLineId == saleLineId).Include("Product").FirstOrDefault());
         }

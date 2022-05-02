@@ -32,7 +32,7 @@ namespace PBSA.Models.DB
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=SQL8001.site4now.net;Initial Catalog=db_a86494_pbsdb;User Id=db_a86494_pbsdb_admin;Password=Bhavesh@143;");
+                optionsBuilder.UseSqlServer("Data Source=SQL8001.site4now.net;Initial Catalog=db_a86494_pbsdb;User Id=db_a86494_pbsdb_admin;Password=Bhavesh@143");
             }
         }
 
@@ -40,6 +40,10 @@ namespace PBSA.Models.DB
         {
             modelBuilder.Entity<Address>(entity =>
             {
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getutcdate())");
+
                 entity.Property(e => e.PostCode)
                     .IsRequired()
                     .HasMaxLength(4);
@@ -70,6 +74,10 @@ namespace PBSA.Models.DB
 
             modelBuilder.Entity<Customer>(entity =>
             {
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getutcdate())");
+
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -98,6 +106,14 @@ namespace PBSA.Models.DB
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getutcdate())");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getutcdate())");
+
                 entity.Property(e => e.PriceAmount).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.PriceTax).HasColumnType("decimal(18, 2)");
@@ -111,6 +127,10 @@ namespace PBSA.Models.DB
 
             modelBuilder.Entity<Sale>(entity =>
             {
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getutcdate())");
+
                 entity.Property(e => e.SaleLineIds)
                     .IsRequired()
                     .HasMaxLength(50);
